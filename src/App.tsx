@@ -5,9 +5,11 @@ import { Dashboard } from './pages/Dashboard';
 import { Employees } from './pages/Employees';
 import { Attendance } from './pages/Attendance';
 import { useAttendanceData } from './hooks/useAttendanceData';
+import { ThemeProvider } from './components/ThemeProvider';
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState('dashboard');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { employees, attendance, addEmployee, markAttendance } = useAttendanceData();
 
   const renderContent = () => {
@@ -33,16 +35,23 @@ export default function App() {
   };
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden font-sans">
-      <Sidebar currentTab={currentTab} setCurrentTab={setCurrentTab} />
-      
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header title={getTitle()} />
+    <ThemeProvider defaultTheme="system" storageKey="attendify-theme">
+      <div className="flex h-screen bg-slate-50 dark:bg-slate-950 overflow-hidden font-sans transition-colors">
+        <Sidebar 
+          currentTab={currentTab} 
+          setCurrentTab={setCurrentTab} 
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
         
-        <main className="flex-1 overflow-y-auto">
-          {renderContent()}
-        </main>
+        <div className="flex-1 flex flex-col overflow-hidden w-full">
+          <Header title={getTitle()} onMenuClick={() => setIsSidebarOpen(true)} />
+          
+          <main className="flex-1 overflow-y-auto">
+            {renderContent()}
+          </main>
+        </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
