@@ -1,0 +1,5 @@
+{
+  "name": "Attendance Tracker",
+  "description": "An application to track employee attendance for an establishment.",
+  "requestFramePermissions": []
+}
